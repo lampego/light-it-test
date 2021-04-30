@@ -1,0 +1,65 @@
+version: "3.8"
+
+services:
+  frontend:
+    container_name: lightit-test-api-local
+    build:
+      context: ./../../
+      dockerfile: devops/local/Dockerfile
+      args:
+        BUILD_COMMAND: build
+    ports:
+      - 6023:83
+    volumes:
+      - ./../../:/var/www/html
+    depends_on:
+      - database
+      - test-database
+      - redis
+    environment:
+      - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
+
+  database:
+    image: mysql:5.7
+    container_name: lightit-test-database-local
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE}
+    ports:
+      - 6024:3306
+    volumes:
+      - lightit_local_volume:/var/lib/mysql
+
+  test-database:
+    image: mysql:5.7
+    container_name: lightit-test-test-database-local
+    ports:
+      - 6008:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE}
+
+  redis:
+    image: redis:6.0
+    container_name: lightit-test-redis-local
+    ports:
+      -  6025:6379
+    volumes:
+      - lightit_local_volume:/data
+
+  swagger-ui:
+    image: swaggerapi/swagger-ui
+    container_name: lightit-test-swagger-local
+    ports:
+      - 6026:8080
+    volumes:
+      - ./../common/swagger:/app
+    environment:
+      - SWAGGER_JSON=/app/swagger.yaml
+volumes:
+  lightit_local_volume:
+    driver: local

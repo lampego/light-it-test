@@ -1,0 +1,66 @@
+openapi: 3.0.0
+info:
+  title: LightIt API
+  description: LightIt API
+  version: 1.0.0
+servers:
+  - url: https://nexthealth-app-api.subs.itproject.club/api
+    description: Prod server API endpoints
+security:
+  - bearerAuth: []
+paths:
+  /login:
+    post:
+      description: Authorization
+      security: []
+      parameters:
+        - in: query
+          name: email
+          description: Email
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: password
+          description: Passwowrd
+          schema:
+            type: string
+            minLength: 6
+            maxLength: 255
+          required: true
+      tags:
+        - Authentication
+      responses:
+        "200":
+          description: User object
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/JwtTokenResponseModel"
+  /logout:
+    post:
+      description: Выход
+      security: []
+      tags:
+        - Authentication
+      responses:
+        "200":
+          description: Logout is ok
+        "400":
+          description: Validation Error
+        "403":
+          description: Permission Denied
+
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    JwtTokenResponseModel:
+      type: object
+      properties:
+        token:
+          type: string
