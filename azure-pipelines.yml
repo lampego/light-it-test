@@ -7,10 +7,7 @@ trigger:
   - master
   - dev
 
-pool: default
-
-variables:
-  phpVersion: 7.4
+pool: ubuntu:latest
 
 steps:
 - task: NodeTool@0
