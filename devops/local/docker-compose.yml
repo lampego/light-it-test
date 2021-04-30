@@ -16,8 +16,6 @@ services:
       - database
       - test-database
       - redis
-    environment:
-      - PHP_IDE_CONFIG=${PHP_IDE_CONFIG}
 
   database:
     image: mysql:5.7
