@@ -1,0 +1,27 @@
+# PHP
+# Test and package your PHP project.
+# Add steps that run tests, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/php
+
+trigger:
+  - master
+  - dev
+
+pool: default
+
+variables:
+  phpVersion: 7.4
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '12.x' # replace this value with the version that you need for your project
+
+- script: npm install
+  displayName: 'Install dependencies'
+
+- script: npm run test:e2e
+  displayName: 'E2E tests'
+
+- script: npm run test:cov
+  displayName: 'Test coverage'
