@@ -1,8 +1,10 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { GameEntity } from './Game.entity';
 
-@Entity()
+@Entity({ name: PublisherEntity.TableName })
 export class PublisherEntity {
+  public static readonly TableName = 'publishers';
+
   @PrimaryGeneratedColumn()
   id: string;
 

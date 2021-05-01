@@ -1,6 +1,11 @@
 FROM ubuntu:latest
 
+WORKDIR /var/www/html
+
 RUN mkdir -p /usr/share/man/man1
+
+ENV TZ=UTC
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apt-get update --fix-missing
 RUN apt-get install -y  curl nano

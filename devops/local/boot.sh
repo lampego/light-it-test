@@ -6,4 +6,6 @@ echo "Waiting for DB..."
 sleep 5
 
 npm install
+npm i -g typeorm
+#npm run typeorm migration:run
 npm run start:dev

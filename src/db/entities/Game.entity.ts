@@ -1,8 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, JoinColumn } from "typeorm";
 import { PublisherEntity } from './Publisher.entity';
+import { GameTagEntity } from "./GameTag.entity";
 
-@Entity()
+@Entity({ name: GameEntity.TableName })
 export class GameEntity {
+  public static readonly TableName = 'games';
+
   @PrimaryGeneratedColumn()
   id: string;
 
@@ -12,13 +15,13 @@ export class GameEntity {
   @Column()
   price: number;
 
-  @Column()
+  @Column({ name: 'release_date' })
+  releaseDate: Date;
+
   @ManyToOne(() => PublisherEntity, (publisher) => publisher.games)
+  @JoinColumn({ referencedColumnName: 'publisher_id' })
   publisher: PublisherEntity;
 
-  @Column()
-  tags: string;
-
-  @Column()
-  releaseDate: Date;
+  @OneToMany(() => GameEntity, (tag) => tag.tags)
+  tags: GameTagEntity;
 }

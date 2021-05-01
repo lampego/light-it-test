@@ -1,0 +1,10 @@
+{
+  "type": "mysql",
+  "entities": ["dist/db/entities/**/*.entity{.ts,.js}"],
+  "synchronize": false,
+  "migrationsTableName": "migrations",
+  "migrations": ["src/db/migrations/*.{.ts,.js}"],
+  "cli": {
+    "migrationsDir": "src/db/migrations"
+  }
+}
