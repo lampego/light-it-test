@@ -9,12 +9,7 @@ services:
       args:
         BUILD_COMMAND: build
     ports:
-      - 6023:3000
-    environment:
-      - DB_HOST=${DB_HOST}
-      - DB_PASSWORD=${DB_PASSWORD}
-      - DB_USER=${DB_USER}
-      - DB_DATABASE=${DB_DATABASE}
+      - 6023:83
     volumes:
       - ./../../:/var/www/html
     depends_on:
