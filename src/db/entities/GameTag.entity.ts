@@ -18,6 +18,6 @@ export class GameTagEntity {
   title: string;
 
   @ManyToOne(() => GameEntity, (game) => game.tags)
-  @JoinColumn({ referencedColumnName: 'game_id' })
+  @JoinColumn({ name: 'game_id' })
   game: GameTagEntity;
 }

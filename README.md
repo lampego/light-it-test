@@ -11,3 +11,7 @@
 ### Connect to the container
 
 `sudo docker exec -ti lightit-test-api-local bash` or `docker exec -ti lightit-test-api-local bash`
+
+### Run migrations
+
+`sudo docker exec -ti lightit-test-api-local npm run -- typeorm migration:run`
