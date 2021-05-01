@@ -1,11 +1,11 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
-import { GameEntity } from '../entities/Game.entity';
+import { CarEntity } from '../entities/CarEntity';
 
 export class CreateTableGames1619853835338 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: GameEntity.TableName,
+        name: CarEntity.TableName,
         columns: [
           {
             name: 'id',
@@ -13,8 +13,8 @@ export class CreateTableGames1619853835338 implements MigrationInterface {
             isPrimary: true,
           },
           {
-            name: 'publisher_id',
-            type: 'int'
+            name: 'manufacturer_id',
+            type: 'int',
           },
           {
             name: 'title',
@@ -39,6 +39,6 @@ export class CreateTableGames1619853835338 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable(GameEntity.TableName);
+    await queryRunner.dropTable(CarEntity.TableName);
   }
 }
