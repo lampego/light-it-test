@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
 import { CarEntity } from '../entities/CarEntity';
 
-export class CreateTableGames1619853835338 implements MigrationInterface {
+export class CreateTableCars1619853835338 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
