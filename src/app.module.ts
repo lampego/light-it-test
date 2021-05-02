@@ -7,13 +7,10 @@ import { ManufacturersDao } from './db/dao/ManufacturersDao.service';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      "entities": ["dist/**/*.entity{.ts,.js}"],
-    }),
+    TypeOrmModule.forRoot(),
     TypeOrmModule.forFeature([ManufacturersRepository]),
   ],
   exports: [
-    ManufacturersDao
   ],
   controllers: [AppController],
   providers: [
