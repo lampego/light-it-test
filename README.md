@@ -15,3 +15,7 @@
 ### Run migrations
 
 `sudo docker exec -ti lightit-test-api-local npm run -- typeorm migration:run`
+
+### Run tests
+
+`sudo docker exec -ti lightit-test-api-local npm run -- test:e2e`

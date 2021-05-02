@@ -1,12 +1,14 @@
 import { Controller, Get } from '@nestjs/common';
-import { AppService } from '../app.service';
+import { ManufacturersDao } from '../db/dao/ManufacturersDao.service';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly service: ManufacturersDao) {
+    // console.log(service.findAll());
+  }
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @Get('/ping')
+  getPing(): string {
+    return 'Pong';
   }
 }
