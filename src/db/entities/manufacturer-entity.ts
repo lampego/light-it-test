@@ -1,12 +1,12 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { CarEntity } from './CarEntity';
+import { CarEntity } from './car-entity';
 
 @Entity({ name: ManufacturerEntity.TableName })
 export class ManufacturerEntity {
   public static readonly TableName = 'manufacturers';
 
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @Column()
   name: string;

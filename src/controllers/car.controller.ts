@@ -1,19 +1,27 @@
-import { Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Get, HttpException, Post, Query } from "@nestjs/common";
+import { CreateCarDto } from './dto/create-car.dto';
+import { ManufacturersDao } from '../db/dao/manufacturers-dao.service';
+import { GetCarsListDto } from './dto/get-cars-list.dto';
 
-@Controller()
+@Controller('car')
 export class CarController {
-  constructor() {
-  }
+  constructor(private ManufacturersDao: ManufacturersDao) {}
 
   @Post()
-  create(@Body() createCarDto: CreateCatDto) {
+  async create(@Body() createCarDto: CreateCarDto) {
+    const isExistsManufacturer = await this.ManufacturersDao.exists(
+      createCarDto.manufacturerId,
+    );
+    if (!isExistsManufacturer) {
+      return new HttpException('Incorrect "manufacturerId"', 403);
+    }
     return 'This action adds a new cat';
   }
 
-  // @Get()
-  // findAll(@Query() query: ListAllEntities) {
-  //   return `This action returns all cats (limit: ${query.limit} items)`;
-  // }
+  @Get()
+  findAll(@Query() query: GetCarsListDto) {
+    return `This action returns all cats (limit: ${query.page} items)`;
+  }
   //
   // @Get(':id')
   // findOne(@Param('id') id: string) {

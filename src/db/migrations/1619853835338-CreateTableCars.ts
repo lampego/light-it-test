@@ -1,5 +1,5 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
-import { CarEntity } from '../entities/CarEntity';
+import { CarEntity } from '../entities/car-entity';
 
 export class CreateTableCars1619853835338 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {

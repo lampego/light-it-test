@@ -1,5 +1,5 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
-import { ManufacturerEntity } from '../entities/ManufacturerEntity';
+import { ManufacturerEntity } from '../entities/manufacturer-entity';
 
 export class SeedManufacturers1619933530732 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {

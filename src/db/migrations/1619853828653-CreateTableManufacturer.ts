@@ -1,5 +1,5 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
-import { ManufacturerEntity } from '../entities/ManufacturerEntity';
+import { ManufacturerEntity } from '../entities/manufacturer-entity';
 
 export class CreateTableManufacturer1619853828653
   implements MigrationInterface {

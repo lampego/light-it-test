@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner, TableForeignKey } from 'typeorm';
-import { CarEntity } from '../entities/CarEntity';
-import { ManufacturerEntity } from '../entities/ManufacturerEntity';
-import { CarTagEntity } from '../entities/CarTagEntity';
+import { CarEntity } from '../entities/car-entity';
+import { ManufacturerEntity } from '../entities/manufacturer-entity';
+import { CarTagEntity } from '../entities/car-tag-entity';
 
 export class CreateForeignKeys1619854705353 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {

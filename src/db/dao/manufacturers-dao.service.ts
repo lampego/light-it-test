@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { ManufacturerEntity } from '../entities/ManufacturerEntity';
+import { ManufacturerEntity } from '../entities/manufacturer-entity';
 import { ManufacturersRepository } from '../repository/ManufacturersRepository.service';
 
 @Injectable()
@@ -20,5 +20,13 @@ export class ManufacturersDao {
 
   async remove(id: string): Promise<void> {
     await this.repository.delete(id);
+  }
+
+  async exists(id: number): Promise<boolean> {
+    const count = await this.repository
+      .createQueryBuilder()
+      .where('user.id = :id', { id: 1 })
+      .getCount();
+    return Promise.resolve(count > 0);
   }
 }

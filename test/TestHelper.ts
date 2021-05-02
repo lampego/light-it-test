@@ -2,8 +2,8 @@ import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ManufacturersRepository } from '../src/db/repository/ManufacturersRepository.service';
-import { HomeController } from '../src/controllers/homeController';
-import { ManufacturersDao } from '../src/db/dao/ManufacturersDao.service';
+import { HomeController } from '../src/controllers/home.controller';
+import { ManufacturersDao } from '../src/db/dao/manufacturers-dao.service';
 
 export default class TestHelper {
   public static async createAppInstance(): Promise<INestApplication> {

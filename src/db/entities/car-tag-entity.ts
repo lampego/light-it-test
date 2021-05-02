@@ -5,14 +5,14 @@ import {
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { CarEntity } from './CarEntity';
+import { CarEntity } from './car-entity';
 
 @Entity({ name: CarTagEntity.TableName })
 export class CarTagEntity {
   public static readonly TableName = 'car_tags';
 
   @PrimaryGeneratedColumn()
-  id: string;
+  id: number;
 
   @Column()
   title: string;

@@ -1,10 +1,28 @@
-import { Length } from "class-validator";
+import {
+  IsDate,
+  IsDecimal,
+  IsInt,
+  Length,
+  MaxLength,
+  Min,
+} from 'class-validator';
 
 export class CreateCarDto {
+  @IsInt()
+  manufacturerId: number;
+
   @Length(10, 20)
-  name: string;
+  title: string;
 
-  age: number;
+  @IsDecimal()
+  @Min(0)
+  price: number;
 
-  breed: string;
+  @IsDate()
+  releaseDate: Date;
+
+  @MaxLength(30, {
+    each: true,
+  })
+  tags?: string[];
 }

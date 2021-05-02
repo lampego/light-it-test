@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { HomeController } from './controllers/homeController';
+import { HomeController } from './controllers/home.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ManufacturersRepository } from './db/repository/ManufacturersRepository.service';
-import { ManufacturersDao } from './db/dao/ManufacturersDao.service';
+import { ManufacturersDao } from './db/dao/manufacturers-dao.service';
 import { CarController } from './controllers/car.controller';
 
 @Module({
