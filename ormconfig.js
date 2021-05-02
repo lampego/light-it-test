@@ -1,3 +1,5 @@
+const isTest = process.env.NODE_ENV === 'test';
+
 module.exports = {
   name: 'default',
   type: 'mysql',
@@ -6,7 +8,11 @@ module.exports = {
   username: process.env['DB_USER'],
   password: process.env['DB_PASSWORD'],
   database: process.env['DB_DATABASE'],
-  entities: [__dirname + '/dist/src/db/entities/*{.ts,.js}'],
+  entities: [
+    isTest
+      ? __dirname + '/src/db/entities/*{.ts,.js}'
+      : __dirname + '/dist/src/db/entities/*{.ts,.js}'
+  ],
   synchronize: false,
   migrationsTableName: 'migrations',
   migrations: ['dist/src/db/migrations/*{.ts,.js}'],
