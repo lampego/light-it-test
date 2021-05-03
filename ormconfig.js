@@ -17,9 +17,6 @@ if (process.env['IS_AZURE_PIPELINES']) {
   migrationsPath = __dirname + '/src/db/migrations/*{.ts,.js}';
 }
 
-console.log('----------------------------------');
-console.log(process.env);
-
 module.exports = {
   name: 'default',
   type: 'mysql',
