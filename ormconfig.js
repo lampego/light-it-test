@@ -9,13 +9,16 @@ let entitiesPath = isTest
   ? __dirname + '/src/db/entities/*{.ts,.js}'
   : __dirname + '/dist/src/db/entities/*{.ts,.js}';
 if (process.env['IS_AZURE_PIPELINES']) {
-  entitiesPath = __dirname + '/dist/src/db/entities/*{.ts,.js}';
+  entitiesPath = __dirname + '/src/db/entities/*{.ts,.js}';
 }
 
 let migrationsPath = 'dist/src/db/migrations/*{.ts,.js}';
 if (process.env['IS_AZURE_PIPELINES']) {
   migrationsPath = __dirname + '/src/db/migrations/*{.ts,.js}';
 }
+
+console.log('----------------------------------');
+console.log(process.env);
 
 module.exports = {
   name: 'default',
