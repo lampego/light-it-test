@@ -12,9 +12,13 @@
 
 `sudo docker exec -ti lightit-test-api-local bash` or `docker exec -ti lightit-test-api-local bash`
 
-### Run migrations
+### Run migrations for Main DB
 
 `sudo docker exec -ti lightit-test-api-local npm run -- typeorm migration:run`
+
+### Run migrations for Test DB
+
+`sudo docker exec --env NODE_ENV=test -ti lightit-test-api-local npm run -- typeorm migration:run`
 
 ### Run tests
 
