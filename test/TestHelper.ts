@@ -1,4 +1,4 @@
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from "@nestjs/common";
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ManufacturersRepository } from '../src/db/repository/ManufacturersRepository.service';
@@ -18,6 +18,8 @@ export default class TestHelper {
       providers: [ManufacturersDao],
     }).compile();
 
-    return moduleFixture.createNestApplication();
+    const app = moduleFixture.createNestApplication();
+    app.useGlobalPipes(new ValidationPipe());
+    return app;
   }
 }

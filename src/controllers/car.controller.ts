@@ -27,6 +27,7 @@ export class CarController {
 
   @Get()
   findAll(@Query() query: GetCarsListDto) {
+    console.log(query)
     return `This action returns all cats (limit: ${query.page} items)`;
   }
   //
