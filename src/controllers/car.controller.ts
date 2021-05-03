@@ -1,14 +1,14 @@
 import {
   Body,
-  Controller,
+  Controller, Delete,
   Get,
   HttpException,
   HttpStatus,
   Param,
   Post,
   Put,
-  Query,
-} from '@nestjs/common';
+  Query
+} from "@nestjs/common";
 import { CreateCarDto } from './dto/request/car/create-car.dto';
 import { ManufacturersDao } from '../db/dao/manufacturers-dao.service';
 import { GetCarsListDto } from './dto/request/car/get-cars-list.dto';
@@ -104,9 +104,15 @@ export class CarController {
     car = await this.carsDao.save(car);
     return new CarResponseDto(car);
   }
-  //
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return `This action removes a #${id} cat`;
-  // }
+
+  @Delete(':id')
+  async remove(@Param('id') id: string) {
+    const car = await this.carsDao.findOne(id);
+    if (!car) {
+      throw new HttpException('Incorrect "id"', HttpStatus.BAD_REQUEST);
+    }
+    await this.carTagsDao.deleteForCar(car.id);
+    await this.carsDao.remove(car.id);
+    return true;
+  }
 }

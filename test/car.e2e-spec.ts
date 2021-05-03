@@ -174,7 +174,8 @@ describe('CarController (e2e)', () => {
         expect(responseData.manufacturer.id).toBeGreaterThanOrEqual(1);
         expect(responseData.manufacturer.name).toBeTruthy();
 
-        expect(responseData.tags.length).toBe(4);
+        // It's not good but randomizer sometimes creates not unique tags
+        expect(responseData.tags.length).toBeGreaterThan(3);
       });
   });
 
@@ -218,6 +219,32 @@ describe('CarController (e2e)', () => {
         expect(responseData.manufacturer.name).toBeTruthy();
 
         expect(responseData.tags.length).toBe(4);
+      });
+  });
+
+  it('/car/:id (DELETE). Should not delete car', async () => {
+    return request(app.getHttpServer())
+      .delete(`/car/987987987`)
+      .set('Content-type', 'application/json')
+      .expect(HttpStatus.BAD_REQUEST);
+  });
+
+  it('/car/:id (DELETE). Should delete exists car', async () => {
+    let fakeCar = CarEntity.createFake();
+    fakeCar.manufacturer = defaultManufacturer;
+    fakeCar = await carsDao.save(fakeCar);
+    for (const i in fakeCar.tags) {
+      const tag = fakeCar.tags[i];
+      await carTagsDao.set(fakeCar, tag.title);
+    }
+
+    return request(app.getHttpServer())
+      .delete(`/car/${fakeCar.id}`)
+      .set('Content-type', 'application/json')
+      .expect(HttpStatus.OK)
+      .expect(async (response) => {
+        const isExists = await carsDao.exists(fakeCar.id);
+        expect(isExists).toBeFalsy();
       });
   });
 });

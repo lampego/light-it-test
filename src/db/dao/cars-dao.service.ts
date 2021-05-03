@@ -34,14 +34,14 @@ export class CarsDao {
     return this.repository.findOne(id, { relations: ['manufacturer', 'tags'] });
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: string | number): Promise<void> {
     await this.repository.delete(id);
   }
 
-  async exists(id: number): Promise<boolean> {
+  async exists(id: string | number): Promise<boolean> {
     const count = await this.repository
       .createQueryBuilder()
-      .where('id = :id', { id: 1 })
+      .where('id = :id', { id })
       .getCount();
     return count > 0;
   }
