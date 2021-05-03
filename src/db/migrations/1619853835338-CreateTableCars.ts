@@ -27,10 +27,6 @@ export class CreateTableCars1619853835338 implements MigrationInterface {
             type: 'decimal(8,2)',
           },
           {
-            name: 'phone',
-            type: 'varchar(50)',
-          },
-          {
             name: 'release_date',
             type: 'datetime',
           },

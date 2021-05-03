@@ -13,6 +13,10 @@ export class CarsDao {
     return await this.repository.save<CarEntity>(entity);
   }
 
+  async saveMany(entities: CarEntity[]): Promise<CarEntity[]> {
+    return await this.repository.save<CarEntity>(entities);
+  }
+
   async insert(entity: CarEntity): Promise<InsertResult> {
     return await this.repository.insert(entity);
   }

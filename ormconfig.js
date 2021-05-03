@@ -19,4 +19,8 @@ module.exports = {
   cli: {
     migrationsDir: 'src/db/migrations',
   },
+  logging: [
+    // 'query',
+    'error',
+  ],
 };
