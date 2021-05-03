@@ -25,7 +25,7 @@ steps:
 - task: AzureMysqlDeployment@1
   inputs:
     ConnectedServiceName: # Or alias azureSubscription
-    ServerName: test-database
+#    ServerName: test-database
     DatabaseName: test-database
     SqlUsername: user
     SqlPassword: password
