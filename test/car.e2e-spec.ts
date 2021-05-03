@@ -73,7 +73,7 @@ describe('CarController (e2e)', () => {
     };
 
     const fakeCars: CarEntity[] = [];
-    for (const i in Array(4)) {
+    for (let i = 0; i < 4; i++) {
       const fakeCar = CarEntity.createFake();
       fakeCar.manufacturer = defaultManufacturer;
       fakeCars.push(fakeCar);
@@ -88,7 +88,7 @@ describe('CarController (e2e)', () => {
         const responseData = response.body as PaginatedResponseDto<CarResponseDto>;
 
         // TODO: Change it to: .toBe after seeder will be created
-        expect(responseData.totalItems).toBeGreaterThanOrEqual(1);
+        expect(responseData.totalItems).toBeGreaterThanOrEqual(3);
         expect(responseData.totalPages).toBeGreaterThanOrEqual(1);
         expect(responseData.items.length).toBeGreaterThanOrEqual(3);
 
