@@ -6,17 +6,20 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { CreateCarDto } from './dto/request/create-car.dto';
+import { CreateCarDto } from './dto/request/car/create-car.dto';
 import { ManufacturersDao } from '../db/dao/manufacturers-dao.service';
-import { GetCarsListDto } from './dto/request/get-cars-list.dto';
+import { GetCarsListDto } from './dto/request/car/get-cars-list.dto';
+import { PaginatedResponseDto } from './dto/response/paginated-response.dto';
+import { CarListItemDto } from './dto/response/car/car-list-item.dto';
+import { CarEntity } from '../db/entities/car-entity';
 
 @Controller('car')
 export class CarController {
-  constructor(private ManufacturersDao: ManufacturersDao) {}
+  constructor(private manufacturersDao: ManufacturersDao) {}
 
   @Post()
   async create(@Body() createCarDto: CreateCarDto) {
-    const isExistsManufacturer = await this.ManufacturersDao.exists(
+    const isExistsManufacturer = await this.manufacturersDao.exists(
       createCarDto.manufacturerId,
     );
     if (!isExistsManufacturer) {
@@ -26,9 +29,15 @@ export class CarController {
   }
 
   @Get()
-  findAll(@Query() query: GetCarsListDto) {
-    console.log(query)
-    return `This action returns all cats (limit: ${query.page} items)`;
+  async findAll(@Query() query: GetCarsListDto) {
+    const getItemsQuery = await this.manufacturersDao.findAllQuery();
+    const response = await PaginatedResponseDto.create<
+      CarListItemDto,
+      CarEntity
+    >(getItemsQuery, query.page, (item) => {
+      return new CarListItemDto(item);
+    });
+    return response;
   }
   //
   // @Get(':id')

@@ -1,9 +1,9 @@
 import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import TestHelper from './TestHelper';
-import { CreateCarDto } from '../src/controllers/dto/request/create-car.dto';
-import { CarEntity } from '../src/db/entities/car-entity';
-import UrlUtils from "../src/utils/url-utils";
+import UrlUtils from '../src/utils/url-utils';
+import { PaginatedResponseDto } from '../src/controllers/dto/response/paginated-response.dto';
+import { CarListItemDto } from '../src/controllers/dto/response/car/car-list-item.dto';
 
 describe('CarController (e2e)', () => {
   let app: INestApplication;
@@ -25,6 +25,44 @@ describe('CarController (e2e)', () => {
       .get('/car?' + UrlUtils.encodeToQueryString(data))
       .set('Content-type', 'application/json')
       .expect(400);
+  });
+
+  it('/car (GET). Should receive empty list if page has large value', () => {
+    const data = {
+      page: 999,
+    };
+
+    return request(app.getHttpServer())
+      .get('/car?' + UrlUtils.encodeToQueryString(data))
+      .set('Content-type', 'application/json')
+      .expect(200)
+      .expect((response) => {
+        const responseData = response.body as PaginatedResponseDto<CarListItemDto>;
+
+        // TODO: Change it to: .toBe after seeder will be created
+        expect(responseData.totalItems).toBeGreaterThanOrEqual(1);
+        expect(responseData.totalPages).toBeGreaterThanOrEqual(1);
+        expect(responseData.items.length).toBe(0);
+      });
+  });
+
+  it('/car (GET). Should receive cars list', () => {
+    const data = {
+      page: 1,
+    };
+
+    return request(app.getHttpServer())
+      .get('/car?' + UrlUtils.encodeToQueryString(data))
+      .set('Content-type', 'application/json')
+      .expect(200)
+      .expect((response) => {
+        const responseData = response.body as PaginatedResponseDto<CarListItemDto>;
+
+        // TODO: Change it to: .toBe after seeder will be created
+        expect(responseData.totalItems).toBeGreaterThanOrEqual(1);
+        expect(responseData.totalPages).toBeGreaterThanOrEqual(1);
+        expect(responseData.items.length).toBeGreaterThanOrEqual(1);
+      });
   });
 
   // it('/car (POST). Should be error if manufacturer is incorrect', () => {

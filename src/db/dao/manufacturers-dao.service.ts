@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ManufacturerEntity } from '../entities/manufacturer-entity';
 import { ManufacturersRepository } from '../repository/ManufacturersRepository.service';
+import { SelectQueryBuilder } from "typeorm/query-builder/SelectQueryBuilder";
 
 @Injectable()
 export class ManufacturersDao {
@@ -12,6 +13,10 @@ export class ManufacturersDao {
 
   findAll(): Promise<ManufacturerEntity[]> {
     return this.repository.find();
+  }
+
+  async findAllQuery(): Promise<SelectQueryBuilder<ManufacturerEntity>> {
+    return this.repository.createQueryBuilder();
   }
 
   findOne(id: string): Promise<ManufacturerEntity> {
