@@ -14,20 +14,27 @@ variables:
   IS_AZURE_PIPELINES: true
   NODE_ENV: 'test'
   DB_DATABASE: 'test-database'
-  DB_USER: 'user'
-  DB_PASSWORD: 'password'
+  DB_USER: 'root'
+  DB_PASSWORD: 'root'
 
 steps:
-- task: AzureMysqlDeployment@1
-  inputs:
-    ConnectedServiceName: azureSubscription
-    DatabaseName: test-database
-    SqlUsername: user
-    SqlPassword: password
 
 - task: NodeTool@0
   inputs:
     versionSpec: '12.x' # replace this value with the version that you need for your project
+
+- script: |
+    mysql --version
+  displayName: 'MySQL Version'
+
+- script: |
+    sudo /etc/init.d/mysql start
+  displayName: 'Start MySQL Server'
+
+- script: |
+    sudo mysql -uroot -proot -e "set global sql_mode='';"
+    sudo mysql -uroot -proot -e "create database test-database;"
+  displayName: 'Create databases'
 
 - script: npm install
   displayName: 'Install dependencies'
