@@ -11,6 +11,8 @@ export class CreateTableCarTags1619854367171 implements MigrationInterface {
             name: 'id',
             type: 'int',
             isPrimary: true,
+            isGenerated: true,
+            generationStrategy: 'increment',
           },
           {
             name: 'car_id',

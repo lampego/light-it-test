@@ -1,25 +1,31 @@
 import { Injectable } from '@nestjs/common';
 import { ManufacturerEntity } from '../entities/manufacturer-entity';
-import { ManufacturersRepository } from '../repository/ManufacturersRepository.service';
 import { SelectQueryBuilder } from 'typeorm/query-builder/SelectQueryBuilder';
+import { CarsRepository } from '../repository/CarsRepository.service';
+import { CarEntity } from '../entities/car-entity';
+import { InsertResult } from 'typeorm';
 
 @Injectable()
-export class ManufacturersDao {
-  constructor(private repository: ManufacturersRepository) {}
+export class CarsDao {
+  constructor(private repository: CarsRepository) {}
 
-  async save(entity: ManufacturerEntity): Promise<ManufacturerEntity> {
-    return await this.repository.save<ManufacturerEntity>(entity);
+  async save(entity: CarEntity): Promise<CarEntity> {
+    return await this.repository.save<CarEntity>(entity);
   }
 
-  findAll(): Promise<ManufacturerEntity[]> {
+  async insert(entity: CarEntity): Promise<InsertResult> {
+    return await this.repository.insert(entity);
+  }
+
+  findAll(): Promise<CarEntity[]> {
     return this.repository.find();
   }
 
-  async findAllQuery(): Promise<SelectQueryBuilder<ManufacturerEntity>> {
+  async findAllQuery(): Promise<SelectQueryBuilder<CarEntity>> {
     return this.repository.createQueryBuilder();
   }
 
-  findOne(id: string): Promise<ManufacturerEntity> {
+  findOne(id: string): Promise<CarEntity> {
     return this.repository.findOne(id);
   }
 

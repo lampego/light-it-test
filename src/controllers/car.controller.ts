@@ -12,10 +12,14 @@ import { GetCarsListDto } from './dto/request/car/get-cars-list.dto';
 import { PaginatedResponseDto } from './dto/response/paginated-response.dto';
 import { CarListItemDto } from './dto/response/car/car-list-item.dto';
 import { CarEntity } from '../db/entities/car-entity';
+import { CarsDao } from '../db/dao/cars-dao.service';
 
 @Controller('car')
 export class CarController {
-  constructor(private manufacturersDao: ManufacturersDao) {}
+  constructor(
+    private manufacturersDao: ManufacturersDao,
+    private carsDao: CarsDao,
+  ) {}
 
   @Post()
   async create(@Body() createCarDto: CreateCarDto) {
@@ -30,7 +34,7 @@ export class CarController {
 
   @Get()
   async findAll(@Query() query: GetCarsListDto) {
-    const getItemsQuery = await this.manufacturersDao.findAllQuery();
+    const getItemsQuery = await this.carsDao.findAllQuery();
     const response = await PaginatedResponseDto.create<
       CarListItemDto,
       CarEntity

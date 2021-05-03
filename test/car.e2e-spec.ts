@@ -4,12 +4,16 @@ import TestHelper from './TestHelper';
 import UrlUtils from '../src/utils/url-utils';
 import { PaginatedResponseDto } from '../src/controllers/dto/response/paginated-response.dto';
 import { CarListItemDto } from '../src/controllers/dto/response/car/car-list-item.dto';
+import { CarsDao } from '../src/db/dao/cars-dao.service';
+import { CarEntity } from "../src/db/entities/car-entity";
 
 describe('CarController (e2e)', () => {
   let app: INestApplication;
+  let carsDao: CarsDao;
 
   beforeEach(async () => {
     app = await TestHelper.createAppInstance();
+    carsDao = app.get(CarsDao);
     await app.init();
   });
 
@@ -17,21 +21,26 @@ describe('CarController (e2e)', () => {
     app.close();
   });
 
-  it('/car (GET). Should not receive list if page is incorrect', () => {
-    const data = {
-      page: null,
-    };
-    return request(app.getHttpServer())
-      .get('/car?' + UrlUtils.encodeToQueryString(data))
-      .set('Content-type', 'application/json')
-      .expect(400);
-  });
+  // it('/car (GET). Should not receive list if page is incorrect', () => {
+  //   const data = {
+  //     page: null,
+  //   };
+  //   return request(app.getHttpServer())
+  //     .get('/car?' + UrlUtils.encodeToQueryString(data))
+  //     .set('Content-type', 'application/json')
+  //     .expect(400);
+  // });
 
-  it('/car (GET). Should receive empty list if page has large value', () => {
+  it('/car (GET). Should receive empty list if page has large value', async () => {
     const data = {
       page: 999,
     };
 
+    const fakeCar = CarEntity.createFake();
+
+    await carsDao.insert(CarEntity.createFake());
+
+    console.log(fakeCar)
     return request(app.getHttpServer())
       .get('/car?' + UrlUtils.encodeToQueryString(data))
       .set('Content-type', 'application/json')
@@ -46,24 +55,24 @@ describe('CarController (e2e)', () => {
       });
   });
 
-  it('/car (GET). Should receive cars list', () => {
-    const data = {
-      page: 1,
-    };
-
-    return request(app.getHttpServer())
-      .get('/car?' + UrlUtils.encodeToQueryString(data))
-      .set('Content-type', 'application/json')
-      .expect(200)
-      .expect((response) => {
-        const responseData = response.body as PaginatedResponseDto<CarListItemDto>;
-
-        // TODO: Change it to: .toBe after seeder will be created
-        expect(responseData.totalItems).toBeGreaterThanOrEqual(1);
-        expect(responseData.totalPages).toBeGreaterThanOrEqual(1);
-        expect(responseData.items.length).toBeGreaterThanOrEqual(1);
-      });
-  });
+  // it('/car (GET). Should receive cars list', () => {
+  //   const data = {
+  //     page: 1,
+  //   };
+  //
+  //   return request(app.getHttpServer())
+  //     .get('/car?' + UrlUtils.encodeToQueryString(data))
+  //     .set('Content-type', 'application/json')
+  //     .expect(200)
+  //     .expect((response) => {
+  //       const responseData = response.body as PaginatedResponseDto<CarListItemDto>;
+  //
+  //       // TODO: Change it to: .toBe after seeder will be created
+  //       expect(responseData.totalItems).toBeGreaterThanOrEqual(1);
+  //       expect(responseData.totalPages).toBeGreaterThanOrEqual(1);
+  //       expect(responseData.items.length).toBeGreaterThanOrEqual(1);
+  //     });
+  // });
 
   // it('/car (POST). Should be error if manufacturer is incorrect', () => {
   //   const car = CarEntity.createFake();
