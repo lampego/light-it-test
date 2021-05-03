@@ -33,16 +33,15 @@ export class CarEntity {
   @OneToMany(() => CarEntity, (tag) => tag.tags)
   tags: CarTagEntity[];
 
-  public static createFake(): CarEntity {
+  public static createFake(tagsCount = 4): CarEntity {
     const entity = new CarEntity();
     entity.title = faker.vehicle.model();
     entity.price = faker.datatype.number(1000000);
     entity.releaseDate = faker.date.past();
 
     entity.tags = [];
-    for (const i in Array(4)) {
-      const tag = new CarTagEntity();
-      tag.title = faker.lorem.word();
+    for (let i = 1; i <= tagsCount; i++) {
+      const tag = new CarTagEntity(faker.lorem.word());
       entity.tags.push(tag);
     }
     return entity;

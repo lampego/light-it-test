@@ -134,8 +134,11 @@ describe('CarController (e2e)', () => {
         expect(responseData.title).toBeTruthy();
         expect(responseData.id).toBeGreaterThanOrEqual(1);
 
+
         expect(responseData.manufacturer.id).toBeGreaterThanOrEqual(1);
         expect(responseData.manufacturer.name).toBeTruthy();
+
+        expect(responseData.tags.length).toBe(4);
       });
   });
 });

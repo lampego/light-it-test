@@ -38,13 +38,13 @@ export class CarController {
     newCar.title = createCarDto.title;
     newCar.price = createCarDto.price;
     newCar.releaseDate = createCarDto.releaseDate;
+    newCar.tags = [];
     _.forEach(createCarDto.tags, (tag) => {
       newCar.tags.push(new CarTagEntity(tag));
     });
 
     newCar.manufacturer = manufacturer;
     newCar = await this.carsDao.save(newCar);
-
     return new CarResponseDto(newCar);
   }
 

@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { ManufacturerEntity } from '../entities/manufacturer-entity';
 import { SelectQueryBuilder } from 'typeorm/query-builder/SelectQueryBuilder';
 import { CarsRepository } from '../repository/CarsRepository.service';
 import { CarEntity } from '../entities/car-entity';
@@ -28,8 +27,7 @@ export class CarsDao {
   async findAllQuery(): Promise<SelectQueryBuilder<CarEntity>> {
     return this.repository
       .createQueryBuilder('cars')
-      .leftJoinAndSelect('cars.manufacturer', 'manufacturer')
-      ;
+      .leftJoinAndSelect('cars.manufacturer', 'manufacturer');
   }
 
   findOne(id: string): Promise<CarEntity> {
