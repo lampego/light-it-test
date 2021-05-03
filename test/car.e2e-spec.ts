@@ -1,4 +1,4 @@
-import { INestApplication } from '@nestjs/common';
+import { HttpStatus, INestApplication } from "@nestjs/common";
 import * as request from 'supertest';
 import TestHelper from './TestHelper';
 import UrlUtils from '../src/utils/url-utils';
@@ -7,6 +7,7 @@ import { CarListItemDto } from '../src/controllers/dto/response/car/car-list-ite
 import { CarsDao } from '../src/db/dao/cars-dao.service';
 import { CarEntity } from '../src/db/entities/car-entity';
 import { ManufacturersDao } from '../src/db/dao/manufacturers-dao.service';
+import { CreateCarDto } from "../src/controllers/dto/request/car/create-car.dto";
 
 describe('CarController (e2e)', () => {
   let app: INestApplication;
@@ -31,7 +32,7 @@ describe('CarController (e2e)', () => {
     return request(app.getHttpServer())
       .get('/car?' + UrlUtils.encodeToQueryString(data))
       .set('Content-type', 'application/json')
-      .expect(400);
+      .expect(HttpStatus.BAD_REQUEST);
   });
 
   it('/car (GET). Should receive empty list if page has large value', async () => {
@@ -46,7 +47,7 @@ describe('CarController (e2e)', () => {
     return request(app.getHttpServer())
       .get('/car?' + UrlUtils.encodeToQueryString(data))
       .set('Content-type', 'application/json')
-      .expect(200)
+      .expect(HttpStatus.OK)
       .expect((response) => {
         const responseData = response.body as PaginatedResponseDto<CarListItemDto>;
 
@@ -74,7 +75,7 @@ describe('CarController (e2e)', () => {
     return request(app.getHttpServer())
       .get('/car?' + UrlUtils.encodeToQueryString(data))
       .set('Content-type', 'application/json')
-      .expect(200)
+      .expect(HttpStatus.OK)
       .expect((response) => {
         const responseData = response.body as PaginatedResponseDto<CarListItemDto>;
 
@@ -85,19 +86,19 @@ describe('CarController (e2e)', () => {
       });
   });
 
-  // it('/car (POST). Should be error if manufacturer is incorrect', () => {
-  //   const car = CarEntity.createFake();
-  //   const postData = new CreateCarDto();
-  //   postData.title = car.title;
-  //   postData.tags = car.tags.map((tag) => tag.title);
-  //   postData.price = car.price;
-  //   postData.releaseDate = car.releaseDate;
-  //   postData.manufacturerId = 999;
-  //
-  //   return request(app.getHttpServer())
-  //     .post('/car')
-  //     .set('Content-type', 'application/json')
-  //     .send(postData)
-  //     .expect(422);
-  // });
+  it('/car (POST). Should be error if manufacturer is incorrect', () => {
+    const car = CarEntity.createFake();
+    const postData = new CreateCarDto();
+    postData.title = car.title;
+    postData.tags = car.tags.map((tag) => tag.title);
+    postData.price = car.price;
+    postData.releaseDate = car.releaseDate;
+    postData.manufacturerId = 999;
+
+    return request(app.getHttpServer())
+      .post('/car')
+      .set('Content-type', 'application/json')
+      .send(postData)
+      .expect(HttpStatus.BAD_REQUEST);
+  });
 });

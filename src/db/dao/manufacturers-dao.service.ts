@@ -30,8 +30,8 @@ export class ManufacturersDao {
   async exists(id: number): Promise<boolean> {
     const count = await this.repository
       .createQueryBuilder()
-      .where('id = :id', { id: 1 })
+      .where('id = :id', { id })
       .getCount();
-    return Promise.resolve(count > 0);
+    return count > 0;
   }
 }

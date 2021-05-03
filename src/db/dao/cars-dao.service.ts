@@ -42,6 +42,6 @@ export class CarsDao {
       .createQueryBuilder()
       .where('id = :id', { id: 1 })
       .getCount();
-    return Promise.resolve(count > 0);
+    return count > 0;
   }
 }

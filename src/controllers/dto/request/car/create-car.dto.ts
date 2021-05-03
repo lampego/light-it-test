@@ -1,24 +1,28 @@
 import {
   IsDate,
   IsDecimal,
-  IsInt,
+  IsInt, IsNumber,
   Length,
   MaxLength,
-  Min,
-} from 'class-validator';
+  Min
+} from "class-validator";
+import { Type } from 'class-transformer';
 
 export class CreateCarDto {
   @IsInt()
+  @Type(() => Number)
   manufacturerId: number;
 
-  @Length(10, 20)
+  @Length(1, 20)
   title: string;
 
-  @IsDecimal()
+  @IsNumber()
   @Min(0)
+  @Type(() => Number)
   price: number;
 
   @IsDate()
+  @Type(() => Date)
   releaseDate: Date;
 
   @MaxLength(30, {
