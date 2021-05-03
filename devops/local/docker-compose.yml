@@ -23,7 +23,7 @@ services:
       - redis
 
   database:
-    image: mysql:5.7
+    image: mysql:8
     container_name: lightit-test-database-local
     environment:
       - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
@@ -36,7 +36,7 @@ services:
       - lightit_local_volume:/var/lib/mysql
 
   test-database:
-    image: mysql:5.7
+    image: mysql:8
     container_name: lightit-test-test-database-local
     ports:
       - 6008:3306

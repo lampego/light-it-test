@@ -39,6 +39,9 @@ steps:
 - script: npm install
   displayName: 'Install dependencies'
 
+- script: npm run typeorm migration:run
+  displayName: 'Run migrations'
+
 - script: npm run test:e2e
   displayName: 'E2E tests'
 
