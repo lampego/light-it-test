@@ -18,8 +18,8 @@ export class CarTagEntity {
   title: string;
 
   @ManyToOne(() => CarEntity, (game) => game.tags)
-  @JoinColumn({ name: 'car_id' })
-  game: CarTagEntity;
+  @JoinColumn({ name: 'car_id', referencedColumnName: 'id' })
+  car: CarEntity;
 
   constructor(title: string = null) {
     this.title = title;

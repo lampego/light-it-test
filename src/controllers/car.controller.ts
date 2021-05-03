@@ -2,7 +2,7 @@ import {
   Body,
   Controller,
   Get,
-  HttpException, HttpStatus,
+  HttpException, HttpStatus, Param,
   Post,
   Query
 } from "@nestjs/common";
@@ -59,12 +59,16 @@ export class CarController {
     });
     return response;
   }
-  //
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return `This action returns a #${id} cat`;
-  // }
-  //
+
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    const car = await this.carsDao.findOne(id);
+    if (!car) {
+      throw new HttpException('Incorrect "id"', HttpStatus.BAD_REQUEST);
+    }
+    return new CarResponseDto(car);
+  }
+
   // @Put(':id')
   // update(@Param('id') id: string, @Body() updateCatDto: UpdateCatDto) {
   //   return `This action updates a #${id} cat`;

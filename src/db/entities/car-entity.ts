@@ -30,7 +30,7 @@ export class CarEntity {
   @JoinColumn({ name: 'manufacturer_id', referencedColumnName: 'id' })
   manufacturer: ManufacturerEntity;
 
-  @OneToMany(() => CarEntity, (tag) => tag.tags)
+  @OneToMany(() => CarTagEntity, (tag) => tag.car)
   tags: CarTagEntity[];
 
   public static createFake(tagsCount = 4): CarEntity {

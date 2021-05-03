@@ -15,6 +15,10 @@ export class CreateTableCarTags1619854367171 implements MigrationInterface {
             generationStrategy: 'increment',
           },
           {
+            name: 'title',
+            type: 'varchar(100)',
+          },
+          {
             name: 'car_id',
             type: 'int',
           },

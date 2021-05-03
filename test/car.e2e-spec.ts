@@ -1,5 +1,6 @@
-import { HttpStatus, INestApplication } from "@nestjs/common";
+import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
+import * as _ from 'lodash';
 import TestHelper from './TestHelper';
 import UrlUtils from '../src/utils/url-utils';
 import { PaginatedResponseDto } from '../src/controllers/dto/response/paginated-response.dto';
@@ -7,12 +8,14 @@ import { CarResponseDto } from '../src/controllers/dto/response/car/car-response
 import { CarsDao } from '../src/db/dao/cars-dao.service';
 import { CarEntity } from '../src/db/entities/car-entity';
 import { ManufacturersDao } from '../src/db/dao/manufacturers-dao.service';
-import { CreateCarDto } from "../src/controllers/dto/request/car/create-car.dto";
-import { ManufacturerEntity } from "../src/db/entities/manufacturer-entity";
+import { CreateCarDto } from '../src/controllers/dto/request/car/create-car.dto';
+import { ManufacturerEntity } from '../src/db/entities/manufacturer-entity';
+import { CarTagsDao } from '../src/db/dao/car-tags-dao.service';
 
 describe('CarController (e2e)', () => {
   let app: INestApplication;
   let carsDao: CarsDao;
+  let carTagsDao: CarTagsDao;
   let manufacturersDao: ManufacturersDao;
 
   let defaultManufacturer: ManufacturerEntity;
@@ -21,6 +24,7 @@ describe('CarController (e2e)', () => {
     app = await TestHelper.createAppInstance();
     carsDao = app.get(CarsDao);
     manufacturersDao = app.get(ManufacturersDao);
+    carTagsDao = app.get(CarTagsDao);
     await app.init();
 
     defaultManufacturer = await manufacturersDao.findOne(1);
@@ -121,7 +125,6 @@ describe('CarController (e2e)', () => {
     postData.releaseDate = car.releaseDate;
     postData.manufacturerId = postData.manufacturerId = defaultManufacturer.id;
 
-
     return request(app.getHttpServer())
       .post('/car')
       .set('Content-type', 'application/json')
@@ -134,6 +137,32 @@ describe('CarController (e2e)', () => {
         expect(responseData.title).toBeTruthy();
         expect(responseData.id).toBeGreaterThanOrEqual(1);
 
+        expect(responseData.manufacturer.id).toBeGreaterThanOrEqual(1);
+        expect(responseData.manufacturer.name).toBeTruthy();
+
+        expect(responseData.tags.length).toBe(4);
+      });
+  });
+
+  it('/car/:id (GET). Should receive exists car', async () => {
+    let fakeCar = CarEntity.createFake();
+    fakeCar.manufacturer = defaultManufacturer;
+    fakeCar = await carsDao.save(fakeCar);
+    for (const i in fakeCar.tags) {
+      const tag = fakeCar.tags[i];
+      await carTagsDao.set(fakeCar, tag.title);
+    }
+
+    return request(app.getHttpServer())
+      .get(`/car/${fakeCar.id}`)
+      .set('Content-type', 'application/json')
+      .expect(HttpStatus.OK)
+      .expect((response) => {
+        const responseData = response.body as CarResponseDto;
+
+        expect(responseData).toBeTruthy();
+        expect(responseData.title).toBeTruthy();
+        expect(responseData.id).toBeGreaterThanOrEqual(1);
 
         expect(responseData.manufacturer.id).toBeGreaterThanOrEqual(1);
         expect(responseData.manufacturer.name).toBeTruthy();
