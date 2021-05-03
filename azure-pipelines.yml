@@ -18,25 +18,16 @@ variables:
   DB_PASSWORD: 'password'
 
 steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '12.x' # replace this value with the version that you need for your project
-
 - task: AzureMysqlDeployment@1
   inputs:
     ConnectedServiceName: # Or alias azureSubscription
-#    ServerName: test-database
     DatabaseName: test-database
     SqlUsername: user
     SqlPassword: password
-    #TaskNameSelector: 'SqlTaskFile' # Optional. Options: SqlTaskFile, InlineSqlTask
-    #SqlFile: # Required when taskNameSelector == SqlTaskFile
-    #SqlInline: # Required when taskNameSelector == InlineSqlTask
-    #SqlAdditionalArguments: # Optional
-    #IpDetectionMethod: 'AutoDetect' # Options: AutoDetect, IPAddressRange
-    #StartIpAddress: # Required when ipDetectionMethod == IPAddressRange
-    #EndIpAddress: # Required when ipDetectionMethod == IPAddressRange
-    #DeleteFirewallRule: true # Optional
+
+- task: NodeTool@0
+  inputs:
+    versionSpec: '12.x' # replace this value with the version that you need for your project
 
 - script: npm install
   displayName: 'Install dependencies'
