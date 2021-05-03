@@ -19,7 +19,7 @@ export class ManufacturersDao {
     return this.repository.createQueryBuilder();
   }
 
-  findOne(id: string): Promise<ManufacturerEntity> {
+  findOne(id: string | number): Promise<ManufacturerEntity> {
     return this.repository.findOne(id);
   }
 

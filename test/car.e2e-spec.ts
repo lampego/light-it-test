@@ -5,15 +5,18 @@ import UrlUtils from '../src/utils/url-utils';
 import { PaginatedResponseDto } from '../src/controllers/dto/response/paginated-response.dto';
 import { CarListItemDto } from '../src/controllers/dto/response/car/car-list-item.dto';
 import { CarsDao } from '../src/db/dao/cars-dao.service';
-import { CarEntity } from "../src/db/entities/car-entity";
+import { CarEntity } from '../src/db/entities/car-entity';
+import { ManufacturersDao } from '../src/db/dao/manufacturers-dao.service';
 
 describe('CarController (e2e)', () => {
   let app: INestApplication;
   let carsDao: CarsDao;
+  let manufacturersDao: ManufacturersDao;
 
   beforeEach(async () => {
     app = await TestHelper.createAppInstance();
     carsDao = app.get(CarsDao);
+    manufacturersDao = app.get(ManufacturersDao);
     await app.init();
   });
 
@@ -37,10 +40,9 @@ describe('CarController (e2e)', () => {
     };
 
     const fakeCar = CarEntity.createFake();
+    fakeCar.manufacturer = await manufacturersDao.findOne(1);
+    await carsDao.insert(fakeCar);
 
-    await carsDao.insert(CarEntity.createFake());
-
-    console.log(fakeCar)
     return request(app.getHttpServer())
       .get('/car?' + UrlUtils.encodeToQueryString(data))
       .set('Content-type', 'application/json')
