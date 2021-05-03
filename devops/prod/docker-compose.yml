@@ -48,16 +48,6 @@ services:
       -  6025:6379
     volumes:
       - lightit_local_volume:/data
-
-  swagger-ui:
-    image: swaggerapi/swagger-ui
-    container_name: lightit-test-swagger-local
-    ports:
-      - 6026:8080
-    volumes:
-      - ./../common/swagger:/app
-    environment:
-      - SWAGGER_JSON=/app/swagger.yaml
 volumes:
   lightit_local_volume:
     driver: local

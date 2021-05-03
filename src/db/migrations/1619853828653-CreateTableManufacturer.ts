@@ -1,11 +1,12 @@
 import { MigrationInterface, QueryRunner, Table } from 'typeorm';
-import { PublisherEntity } from '../entities/Publisher.entity';
+import { ManufacturerEntity } from '../entities/manufacturer-entity';
 
-export class CreateTablePublishers1619853828653 implements MigrationInterface {
+export class CreateTableManufacturer1619853828653
+  implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: PublisherEntity.TableName,
+        name: ManufacturerEntity.TableName,
         columns: [
           {
             name: 'id',
@@ -31,6 +32,6 @@ export class CreateTablePublishers1619853828653 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable(PublisherEntity.TableName);
+    await queryRunner.dropTable(ManufacturerEntity.TableName);
   }
 }
