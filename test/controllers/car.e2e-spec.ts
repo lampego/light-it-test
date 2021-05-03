@@ -1,16 +1,16 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import * as _ from 'lodash';
-import TestHelper from './TestHelper';
-import UrlUtils from '../src/utils/url-utils';
-import { PaginatedResponseDto } from '../src/controllers/dto/response/paginated-response.dto';
-import { CarResponseDto } from '../src/controllers/dto/response/car/car-response.dto';
-import { CarsDao } from '../src/db/dao/cars-dao.service';
-import { CarEntity } from '../src/db/entities/car-entity';
-import { ManufacturersDao } from '../src/db/dao/manufacturers-dao.service';
-import { CreateCarDto } from '../src/controllers/dto/request/car/create-car.dto';
-import { ManufacturerEntity } from '../src/db/entities/manufacturer-entity';
-import { CarTagsDao } from '../src/db/dao/car-tags-dao.service';
+import TestHelper from '../TestHelper';
+import UrlUtils from '../../src/utils/url-utils';
+import { PaginatedResponseDto } from '../../src/controllers/dto/response/paginated-response.dto';
+import { CarResponseDto } from '../../src/controllers/dto/response/car/car-response.dto';
+import { CarsDao } from '../../src/db/dao/cars-dao.service';
+import { CarEntity } from '../../src/db/entities/car-entity';
+import { ManufacturersDao } from '../../src/db/dao/manufacturers-dao.service';
+import { CreateCarDto } from '../../src/controllers/dto/request/car/create-car.dto';
+import { ManufacturerEntity } from '../../src/db/entities/manufacturer-entity';
+import { CarTagsDao } from '../../src/db/dao/car-tags-dao.service';
 
 describe('CarController (e2e)', () => {
   let app: INestApplication;
@@ -175,7 +175,7 @@ describe('CarController (e2e)', () => {
         expect(responseData.manufacturer.name).toBeTruthy();
 
         // It's not good but randomizer sometimes creates not unique tags
-        expect(responseData.tags.length).toBeGreaterThan(3);
+        expect(responseData.tags.length).toBeGreaterThanOrEqual(3);
       });
   });
 

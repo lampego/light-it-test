@@ -23,3 +23,7 @@
 ### Run tests
 
 `sudo docker exec -ti lightit-test-api-local npm run -- test:e2e`
+
+or
+
+`sudo docker exec -ti lightit-test-api-local npm run -- test:e2e-watch`

@@ -3,12 +3,16 @@ import { SelectQueryBuilder } from 'typeorm/query-builder/SelectQueryBuilder';
 import { CarsRepository } from '../repository/cars-repository.service';
 import { CarEntity } from '../entities/car-entity';
 import { InsertResult } from 'typeorm';
+import * as moment from 'moment';
 
 @Injectable()
 export class CarsDao {
+  private discount = 0.2;
+
   constructor(private repository: CarsRepository) {}
 
   async save(entity: CarEntity): Promise<CarEntity> {
+    entity.calculatedPrice = entity.price - entity.price * this.discount;
     return await this.repository.save<CarEntity>(entity);
   }
 
@@ -17,6 +21,7 @@ export class CarsDao {
   }
 
   async insert(entity: CarEntity): Promise<InsertResult> {
+    entity.calculatedPrice = entity.price - entity.price * this.discount;
     return await this.repository.insert(entity);
   }
 
@@ -30,7 +35,7 @@ export class CarsDao {
       .leftJoinAndSelect('cars.manufacturer', 'manufacturer');
   }
 
-  findOne(id: string): Promise<CarEntity> {
+  findOne(id: string | number): Promise<CarEntity> {
     return this.repository.findOne(id, { relations: ['manufacturer', 'tags'] });
   }
 
@@ -44,5 +49,30 @@ export class CarsDao {
       .where('id = :id', { id })
       .getCount();
     return count > 0;
+  }
+
+  async recalculateDiscount(): Promise<boolean> {
+    // Reset all prices
+    await this.repository
+      .createQueryBuilder()
+      .update()
+      .set({
+        calculatedPrice: () => 'price',
+      })
+      .execute();
+
+    await this.repository
+      .createQueryBuilder()
+      .update()
+      .set({
+        calculatedPrice: () => `price - price * ${this.discount}`,
+      })
+      .where('release_date >= :startDate AND release_date <= :endDate', {
+        startDate: moment().startOf('day').subtract(18, 'months').toDate(),
+        endDate: moment().endOf('day').subtract(12, 'months').toDate(),
+      })
+      .execute();
+
+    return true;
   }
 }

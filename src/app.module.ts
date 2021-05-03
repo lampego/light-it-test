@@ -8,6 +8,8 @@ import { CarsRepository } from './db/repository/cars-repository.service';
 import { CarsDao } from './db/dao/cars-dao.service';
 import { CarTagsRepository } from './db/repository/car-tags-repository.service';
 import { CarTagsDao } from './db/dao/car-tags-dao.service';
+import { ScheduleModule } from '@nestjs/schedule';
+import CrontabService from './services/crontab.service';
 
 @Module({
   imports: [
@@ -17,10 +19,11 @@ import { CarTagsDao } from './db/dao/car-tags-dao.service';
       CarsRepository,
       CarTagsRepository,
     ]),
+    ScheduleModule.forRoot(),
   ],
   exports: [],
   controllers: [HomeController, CarController],
-  providers: [ManufacturersDao, CarsDao, CarTagsDao],
+  providers: [CrontabService, ManufacturersDao, CarsDao, CarTagsDao],
 })
 export class AppModule {
   constructor() {}

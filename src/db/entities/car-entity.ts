@@ -23,6 +23,9 @@ export class CarEntity {
   @Column()
   price: number;
 
+  @Column({ name: 'calculated_price' })
+  calculatedPrice: number;
+
   @Column({ name: 'release_date' })
   releaseDate: Date;
 
@@ -37,6 +40,7 @@ export class CarEntity {
     const entity = new CarEntity();
     entity.title = faker.vehicle.model();
     entity.price = faker.datatype.number(1000000);
+    entity.calculatedPrice = entity.price;
     entity.releaseDate = faker.date.past();
 
     entity.tags = [];
