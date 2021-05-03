@@ -11,7 +11,7 @@ export default class CrontabService {
 
   @Cron('0 0 0 * * *')
   async recalculateCarPrices() {
-    this.logger.debug('Called when the current second is 45');
+    this.logger.debug('Price recalculation. Wait a minute :)');
     await this.carsDao.recalculateDiscount();
   }
 }
