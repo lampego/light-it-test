@@ -20,7 +20,7 @@ variables:
 steps:
 - task: AzureMysqlDeployment@1
   inputs:
-    ConnectedServiceName: # Or alias azureSubscription
+    ConnectedServiceName: azureSubscription
     DatabaseName: test-database
     SqlUsername: user
     SqlPassword: password
