@@ -13,7 +13,7 @@ pool:
 variables:
   IS_AZURE_PIPELINES: true
   NODE_ENV: 'test'
-  DB_DATABASE: 'test-database'
+  DB_DATABASE: 'test_database'
   DB_USER: 'root'
   DB_PASSWORD: 'root'
 
@@ -33,7 +33,7 @@ steps:
 
 - script: |
     sudo mysql -uroot -proot -e "set global sql_mode='';"
-    sudo mysql -uroot -proot -e "create database test-database;"
+    sudo mysql -uroot -proot -e "create database test_database;"
   displayName: 'Create databases'
 
 - script: npm install
