@@ -27,7 +27,7 @@ export class CarEntity {
   releaseDate: Date;
 
   @ManyToOne(() => ManufacturerEntity, (manufacturer) => manufacturer.cars)
-  @JoinColumn({ name: 'manufacturer_id' })
+  @JoinColumn({ name: 'manufacturer_id', referencedColumnName: 'id' })
   manufacturer: ManufacturerEntity;
 
   @OneToMany(() => CarEntity, (tag) => tag.tags)

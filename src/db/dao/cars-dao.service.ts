@@ -26,11 +26,14 @@ export class CarsDao {
   }
 
   async findAllQuery(): Promise<SelectQueryBuilder<CarEntity>> {
-    return this.repository.createQueryBuilder();
+    return this.repository
+      .createQueryBuilder('cars')
+      .leftJoinAndSelect('cars.manufacturer', 'manufacturer')
+      ;
   }
 
   findOne(id: string): Promise<CarEntity> {
-    return this.repository.findOne(id);
+    return this.repository.findOne(id, { relations: ['manufacturer', 'tags'] });
   }
 
   async remove(id: string): Promise<void> {

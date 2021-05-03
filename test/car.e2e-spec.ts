@@ -3,7 +3,7 @@ import * as request from 'supertest';
 import TestHelper from './TestHelper';
 import UrlUtils from '../src/utils/url-utils';
 import { PaginatedResponseDto } from '../src/controllers/dto/response/paginated-response.dto';
-import { CarListItemDto } from '../src/controllers/dto/response/car/car-list-item.dto';
+import { CarResponseDto } from '../src/controllers/dto/response/car/car-response.dto';
 import { CarsDao } from '../src/db/dao/cars-dao.service';
 import { CarEntity } from '../src/db/entities/car-entity';
 import { ManufacturersDao } from '../src/db/dao/manufacturers-dao.service';
@@ -49,7 +49,7 @@ describe('CarController (e2e)', () => {
       .set('Content-type', 'application/json')
       .expect(HttpStatus.OK)
       .expect((response) => {
-        const responseData = response.body as PaginatedResponseDto<CarListItemDto>;
+        const responseData = response.body as PaginatedResponseDto<CarResponseDto>;
 
         // TODO: Change it to: .toBe after seeder will be created
         expect(responseData.totalItems).toBeGreaterThanOrEqual(1);
@@ -77,12 +77,18 @@ describe('CarController (e2e)', () => {
       .set('Content-type', 'application/json')
       .expect(HttpStatus.OK)
       .expect((response) => {
-        const responseData = response.body as PaginatedResponseDto<CarListItemDto>;
+        const responseData = response.body as PaginatedResponseDto<CarResponseDto>;
 
         // TODO: Change it to: .toBe after seeder will be created
         expect(responseData.totalItems).toBeGreaterThanOrEqual(3);
         expect(responseData.totalPages).toBeGreaterThanOrEqual(1);
         expect(responseData.items.length).toBeGreaterThanOrEqual(3);
+
+        for (const index in responseData.items) {
+          const item = responseData.items[index];
+          expect(item.manufacturer.id).toBeGreaterThanOrEqual(1);
+          expect(item.manufacturer.name).toBeTruthy();
+        }
       });
   });
 

@@ -10,7 +10,7 @@ import { CreateCarDto } from './dto/request/car/create-car.dto';
 import { ManufacturersDao } from '../db/dao/manufacturers-dao.service';
 import { GetCarsListDto } from './dto/request/car/get-cars-list.dto';
 import { PaginatedResponseDto } from './dto/response/paginated-response.dto';
-import { CarListItemDto } from './dto/response/car/car-list-item.dto';
+import { CarResponseDto } from './dto/response/car/car-response.dto';
 import { CarEntity } from '../db/entities/car-entity';
 import { CarsDao } from '../db/dao/cars-dao.service';
 
@@ -39,10 +39,10 @@ export class CarController {
   async findAll(@Query() query: GetCarsListDto) {
     const getItemsQuery = await this.carsDao.findAllQuery();
     const response = await PaginatedResponseDto.create<
-      CarListItemDto,
+      CarResponseDto,
       CarEntity
     >(getItemsQuery, query.page, (item) => {
-      return new CarListItemDto(item);
+      return new CarResponseDto(item);
     });
     return response;
   }
