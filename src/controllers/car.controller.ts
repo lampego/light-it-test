@@ -2,10 +2,13 @@ import {
   Body,
   Controller,
   Get,
-  HttpException, HttpStatus, Param,
+  HttpException,
+  HttpStatus,
+  Param,
   Post,
-  Query
-} from "@nestjs/common";
+  Put,
+  Query,
+} from '@nestjs/common';
 import { CreateCarDto } from './dto/request/car/create-car.dto';
 import { ManufacturersDao } from '../db/dao/manufacturers-dao.service';
 import { GetCarsListDto } from './dto/request/car/get-cars-list.dto';
@@ -13,14 +16,16 @@ import { PaginatedResponseDto } from './dto/response/paginated-response.dto';
 import { CarResponseDto } from './dto/response/car/car-response.dto';
 import { CarEntity } from '../db/entities/car-entity';
 import { CarsDao } from '../db/dao/cars-dao.service';
-import * as _ from "lodash";
-import { CarTagEntity } from "../db/entities/car-tag-entity";
+import * as _ from 'lodash';
+import { CarTagEntity } from '../db/entities/car-tag-entity';
+import { CarTagsDao } from '../db/dao/car-tags-dao.service';
 
 @Controller('car')
 export class CarController {
   constructor(
     private manufacturersDao: ManufacturersDao,
     private carsDao: CarsDao,
+    private carTagsDao: CarTagsDao,
   ) {}
 
   @Post()
@@ -69,10 +74,36 @@ export class CarController {
     return new CarResponseDto(car);
   }
 
-  // @Put(':id')
-  // update(@Param('id') id: string, @Body() updateCatDto: UpdateCatDto) {
-  //   return `This action updates a #${id} cat`;
-  // }
+  @Put(':id')
+  async update(@Param('id') id: string, @Body() updateCarDto: CreateCarDto) {
+    let car = await this.carsDao.findOne(id);
+    if (!car) {
+      throw new HttpException('Incorrect "id"', HttpStatus.BAD_REQUEST);
+    }
+    const manufacturer = await this.manufacturersDao.findOne(
+      updateCarDto.manufacturerId,
+    );
+    if (!manufacturer) {
+      throw new HttpException(
+        'Incorrect "manufacturerId"',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+    // Delete exists tags
+    await this.carTagsDao.deleteForCar(car.id);
+
+    car.title = updateCarDto.title;
+    car.price = updateCarDto.price;
+    car.releaseDate = updateCarDto.releaseDate;
+    car.tags = [];
+    _.forEach(updateCarDto.tags, (tag) => {
+      car.tags.push(new CarTagEntity(tag));
+    });
+
+    car.manufacturer = manufacturer;
+    car = await this.carsDao.save(car);
+    return new CarResponseDto(car);
+  }
   //
   // @Delete(':id')
   // remove(@Param('id') id: string) {

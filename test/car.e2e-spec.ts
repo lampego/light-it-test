@@ -144,6 +144,13 @@ describe('CarController (e2e)', () => {
       });
   });
 
+  it('/car/:id (GET). Should not receive exists car', async () => {
+    return request(app.getHttpServer())
+      .get(`/car/987897`)
+      .set('Content-type', 'application/json')
+      .expect(HttpStatus.BAD_REQUEST);
+  });
+
   it('/car/:id (GET). Should receive exists car', async () => {
     let fakeCar = CarEntity.createFake();
     fakeCar.manufacturer = defaultManufacturer;
@@ -163,6 +170,49 @@ describe('CarController (e2e)', () => {
         expect(responseData).toBeTruthy();
         expect(responseData.title).toBeTruthy();
         expect(responseData.id).toBeGreaterThanOrEqual(1);
+
+        expect(responseData.manufacturer.id).toBeGreaterThanOrEqual(1);
+        expect(responseData.manufacturer.name).toBeTruthy();
+
+        expect(responseData.tags.length).toBe(4);
+      });
+  });
+
+  it('/car/:id (PUT). Should not update exists car', async () => {
+    return request(app.getHttpServer())
+      .get(`/car/987897`)
+      .set('Content-type', 'application/json')
+      .expect(HttpStatus.BAD_REQUEST);
+  });
+
+  it('/car/:id (PUT). Should update exists car', async () => {
+    let fakeCar = CarEntity.createFake();
+    fakeCar.manufacturer = defaultManufacturer;
+    fakeCar = await carsDao.save(fakeCar);
+    for (const i in fakeCar.tags) {
+      const tag = fakeCar.tags[i];
+      await carTagsDao.set(fakeCar, tag.title);
+    }
+
+    const newCarData = CarEntity.createFake();
+    const postData = new CreateCarDto();
+    postData.title = newCarData.title;
+    postData.tags = newCarData.tags.map((tag) => tag.title);
+    postData.price = newCarData.price;
+    postData.releaseDate = newCarData.releaseDate;
+    postData.manufacturerId = defaultManufacturer.id;
+
+    return request(app.getHttpServer())
+      .put(`/car/${fakeCar.id}`)
+      .set('Content-type', 'application/json')
+      .send(postData)
+      .expect(HttpStatus.OK)
+      .expect((response) => {
+        const responseData = response.body as CarResponseDto;
+
+        expect(responseData).toBeTruthy();
+        expect(responseData.title).toBe(newCarData.title);
+        expect(responseData.id).toBe(fakeCar.id);
 
         expect(responseData.manufacturer.id).toBeGreaterThanOrEqual(1);
         expect(responseData.manufacturer.name).toBeTruthy();

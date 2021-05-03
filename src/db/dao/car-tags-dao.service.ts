@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CarEntity } from '../entities/car-entity';
 import { CarTagsRepository } from '../repository/CarTagsRepository.service';
 import { CarTagEntity } from '../entities/car-tag-entity';
+import { DeleteResult } from "typeorm/query-builder/result/DeleteResult";
 
 @Injectable()
 export class CarTagsDao {
@@ -18,9 +19,17 @@ export class CarTagsDao {
   }
 
   async findOne(carId: number, title: string): Promise<CarTagEntity> {
-    return this.repository
+    return await this.repository
       .createQueryBuilder()
       .where('car_id = :carId AND title = :title', { carId, title })
       .getOne();
+  }
+
+  async deleteForCar(carId: number): Promise<DeleteResult> {
+    return await this.repository
+      .createQueryBuilder()
+      .delete()
+      .where('car_id = :carId', { carId })
+      .execute();
   }
 }
