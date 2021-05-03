@@ -1,12 +1,16 @@
 import {
   IsDate,
   IsDecimal,
-  IsInt, IsNumber,
+  IsInt,
+  IsNumber,
   Length,
   MaxLength,
   Min
-} from "class-validator";
+} from 'class-validator';
 import { Type } from 'class-transformer';
+import * as _ from 'lodash';
+import { CarEntity } from '../../../../db/entities/car-entity';
+import { CarTagEntity } from '../../../../db/entities/car-tag-entity';
 
 export class CreateCarDto {
   @IsInt()

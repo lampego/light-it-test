@@ -20,4 +20,8 @@ export class CarTagEntity {
   @ManyToOne(() => CarEntity, (game) => game.tags)
   @JoinColumn({ name: 'car_id' })
   game: CarTagEntity;
+
+  constructor(title: string = null) {
+    this.title = title;
+  }
 }

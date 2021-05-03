@@ -8,17 +8,22 @@ import { CarsDao } from '../src/db/dao/cars-dao.service';
 import { CarEntity } from '../src/db/entities/car-entity';
 import { ManufacturersDao } from '../src/db/dao/manufacturers-dao.service';
 import { CreateCarDto } from "../src/controllers/dto/request/car/create-car.dto";
+import { ManufacturerEntity } from "../src/db/entities/manufacturer-entity";
 
 describe('CarController (e2e)', () => {
   let app: INestApplication;
   let carsDao: CarsDao;
   let manufacturersDao: ManufacturersDao;
 
+  let defaultManufacturer: ManufacturerEntity;
+
   beforeAll(async () => {
     app = await TestHelper.createAppInstance();
     carsDao = app.get(CarsDao);
     manufacturersDao = app.get(ManufacturersDao);
     await app.init();
+
+    defaultManufacturer = await manufacturersDao.findOne(1);
   });
 
   afterAll(() => {
@@ -41,7 +46,7 @@ describe('CarController (e2e)', () => {
     };
 
     const fakeCar = CarEntity.createFake();
-    fakeCar.manufacturer = await manufacturersDao.findOne(1);
+    fakeCar.manufacturer = defaultManufacturer;
     await carsDao.insert(fakeCar);
 
     return request(app.getHttpServer())
@@ -63,11 +68,10 @@ describe('CarController (e2e)', () => {
       page: 1,
     };
 
-    const manufacturer = await manufacturersDao.findOne(1);
     const fakeCars: CarEntity[] = [];
     for (const i in Array(4)) {
       const fakeCar = CarEntity.createFake();
-      fakeCar.manufacturer = manufacturer;
+      fakeCar.manufacturer = defaultManufacturer;
       fakeCars.push(fakeCar);
     }
     await carsDao.saveMany(fakeCars);
@@ -106,5 +110,32 @@ describe('CarController (e2e)', () => {
       .set('Content-type', 'application/json')
       .send(postData)
       .expect(HttpStatus.BAD_REQUEST);
+  });
+
+  it('/car (POST). Should add new car', () => {
+    const car = CarEntity.createFake();
+    const postData = new CreateCarDto();
+    postData.title = car.title;
+    postData.tags = car.tags.map((tag) => tag.title);
+    postData.price = car.price;
+    postData.releaseDate = car.releaseDate;
+    postData.manufacturerId = postData.manufacturerId = defaultManufacturer.id;
+
+
+    return request(app.getHttpServer())
+      .post('/car')
+      .set('Content-type', 'application/json')
+      .send(postData)
+      .expect(HttpStatus.CREATED)
+      .expect((response) => {
+        const responseData = response.body as CarResponseDto;
+
+        expect(responseData).toBeTruthy();
+        expect(responseData.title).toBeTruthy();
+        expect(responseData.id).toBeGreaterThanOrEqual(1);
+
+        expect(responseData.manufacturer.id).toBeGreaterThanOrEqual(1);
+        expect(responseData.manufacturer.name).toBeTruthy();
+      });
   });
 });

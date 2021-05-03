@@ -13,6 +13,8 @@ import { PaginatedResponseDto } from './dto/response/paginated-response.dto';
 import { CarResponseDto } from './dto/response/car/car-response.dto';
 import { CarEntity } from '../db/entities/car-entity';
 import { CarsDao } from '../db/dao/cars-dao.service';
+import * as _ from "lodash";
+import { CarTagEntity } from "../db/entities/car-tag-entity";
 
 @Controller('car')
 export class CarController {
@@ -23,16 +25,27 @@ export class CarController {
 
   @Post()
   async create(@Body() createCarDto: CreateCarDto) {
-    const isExistsManufacturer = await this.manufacturersDao.exists(
+    const manufacturer = await this.manufacturersDao.findOne(
       createCarDto.manufacturerId,
     );
-    if (!isExistsManufacturer) {
+    if (!manufacturer) {
       throw new HttpException(
         'Incorrect "manufacturerId"',
         HttpStatus.BAD_REQUEST,
       );
     }
-    return 'This action adds a new cat';
+    let newCar = new CarEntity();
+    newCar.title = createCarDto.title;
+    newCar.price = createCarDto.price;
+    newCar.releaseDate = createCarDto.releaseDate;
+    _.forEach(createCarDto.tags, (tag) => {
+      newCar.tags.push(new CarTagEntity(tag));
+    });
+
+    newCar.manufacturer = manufacturer;
+    newCar = await this.carsDao.save(newCar);
+
+    return new CarResponseDto(newCar);
   }
 
   @Get()
