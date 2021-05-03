@@ -11,6 +11,7 @@ pool:
   vmImage: 'ubuntu-latest' # examples of other options: 'macOS-10.15', 'vs2017-win2016'
 
 variables:
+  IS_AZURE_PIPELINES: true
   NODE_ENV: 'test'
   DB_DATABASE: 'test-database'
   DB_USER: 'user'
