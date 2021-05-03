@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ManufacturerEntity } from '../entities/manufacturer-entity';
-import { ManufacturersRepository } from '../repository/ManufacturersRepository.service';
+import { ManufacturersRepository } from '../repository/manufacturers-repository.service';
 import { SelectQueryBuilder } from 'typeorm/query-builder/SelectQueryBuilder';
 
 @Injectable()

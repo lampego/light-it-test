@@ -1,13 +1,13 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ManufacturersRepository } from '../src/db/repository/ManufacturersRepository.service';
+import { ManufacturersRepository } from '../src/db/repository/manufacturers-repository.service';
 import { HomeController } from '../src/controllers/home.controller';
 import { ManufacturersDao } from '../src/db/dao/manufacturers-dao.service';
 import { CarController } from '../src/controllers/car.controller';
-import { CarsRepository } from '../src/db/repository/CarsRepository.service';
+import { CarsRepository } from '../src/db/repository/cars-repository.service';
 import { CarsDao } from '../src/db/dao/cars-dao.service';
-import { CarTagsRepository } from '../src/db/repository/CarTagsRepository.service';
+import { CarTagsRepository } from '../src/db/repository/car-tags-repository.service';
 import { CarTagsDao } from '../src/db/dao/car-tags-dao.service';
 
 export default class TestHelper {

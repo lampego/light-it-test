@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { SelectQueryBuilder } from 'typeorm/query-builder/SelectQueryBuilder';
-import { CarsRepository } from '../repository/CarsRepository.service';
+import { CarsRepository } from '../repository/cars-repository.service';
 import { CarEntity } from '../entities/car-entity';
 import { InsertResult } from 'typeorm';
 

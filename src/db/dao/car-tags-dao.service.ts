@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CarEntity } from '../entities/car-entity';
-import { CarTagsRepository } from '../repository/CarTagsRepository.service';
+import { CarTagsRepository } from '../repository/car-tags-repository.service';
 import { CarTagEntity } from '../entities/car-tag-entity';
 import { DeleteResult } from "typeorm/query-builder/result/DeleteResult";
 
