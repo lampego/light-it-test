@@ -1,7 +1,14 @@
-import { Body, Controller, Get, HttpException, Post, Query } from "@nestjs/common";
-import { CreateCarDto } from './dto/create-car.dto';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpException,
+  Post,
+  Query,
+} from '@nestjs/common';
+import { CreateCarDto } from './dto/request/create-car.dto';
 import { ManufacturersDao } from '../db/dao/manufacturers-dao.service';
-import { GetCarsListDto } from './dto/get-cars-list.dto';
+import { GetCarsListDto } from './dto/request/get-cars-list.dto';
 
 @Controller('car')
 export class CarController {
@@ -13,7 +20,7 @@ export class CarController {
       createCarDto.manufacturerId,
     );
     if (!isExistsManufacturer) {
-      return new HttpException('Incorrect "manufacturerId"', 403);
+      return new HttpException('Incorrect "manufacturerId"', 422);
     }
     return 'This action adds a new cat';
   }
