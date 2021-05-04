@@ -1,6 +1,5 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
-import * as _ from 'lodash';
 import TestHelper from '../TestHelper';
 import UrlUtils from '../../src/utils/url-utils';
 import { PaginatedResponseDto } from '../../src/controllers/dto/response/paginated-response.dto';

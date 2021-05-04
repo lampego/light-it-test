@@ -17,11 +17,12 @@ export class PaginatedResponseDto<T extends PaginatedResponseItemDto> {
     onPrepareModels: (entity: Entity) => PaginatedResponseItemDto,
     pageSize = 20,
   ): Promise<PaginatedResponseDto<PaginatedResponseItemDto>> {
-    page = page < 1 ? 1 : page;
-    const offset = pageSize * (page - 1);
+    const paginatedModel = new PaginatedResponseDto();
+
+    paginatedModel.page = page < 1 ? 1 : page;
+    const offset = pageSize * (paginatedModel.page - 1);
     const result = await query.limit(pageSize).offset(offset).getManyAndCount();
 
-    const paginatedModel = new PaginatedResponseDto();
     paginatedModel.items = result[0].map(onPrepareModels);
     paginatedModel.totalItems = result[1];
     paginatedModel.totalPages = Math.ceil(paginatedModel.totalItems / pageSize);

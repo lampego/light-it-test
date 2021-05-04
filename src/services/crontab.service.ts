@@ -6,11 +6,10 @@ import { CarsDao } from '../db/dao/cars-dao.service';
 export default class CrontabService {
   private readonly logger = new Logger(CrontabService.name);
 
-  constructor(private carsDao: CarsDao) {
-  }
+  constructor(private carsDao: CarsDao) {}
 
   @Cron('0 0 0 * * *')
-  async recalculateCarPrices() {
+  async recalculateCarPricesJob() {
     this.logger.debug('Price recalculation. Wait a minute :)');
     await this.carsDao.recalculateDiscount();
   }

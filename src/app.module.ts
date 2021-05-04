@@ -25,6 +25,4 @@ import CrontabService from './services/crontab.service';
   controllers: [HomeController, CarController],
   providers: [CrontabService, ManufacturersDao, CarsDao, CarTagsDao],
 })
-export class AppModule {
-  constructor() {}
-}
+export class AppModule {}
